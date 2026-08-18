@@ -1,0 +1,2498 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHOY - Association of Humble and Obedient Youths | Repository</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #c41e2a;
+            --primary-dark: #9a1520;
+            --primary-light: #e83545;
+            --secondary: #1a1a2e;
+            --accent: #f5a623;
+            --accent-dark: #d4901c;
+            --bg-dark: #0a0a14;
+            --bg-card: #12121e;
+            --bg-card-hover: #1a1a2e;
+            --bg-surface: #16162a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6b6b85;
+            --border: #2a2a40;
+            --border-light: #353550;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* ===== HEADER / NAV ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+        }
+
+        .header.scrolled {
+            background: rgba(10, 10, 20, 0.95);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-brand-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .nav-brand-sub {
+            font-size: 10px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-light);
+        }
+
+        .nav-admin-btn {
+            background: var(--primary) !important;
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: var(--radius-sm) !important;
+            font-weight: 600 !important;
+        }
+
+        .nav-admin-btn:hover {
+            background: var(--primary-dark) !important;
+            transform: translateY(-1px);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 20, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            padding: 24px;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open { display: flex; }
+
+        .mobile-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-nav a:hover, .mobile-nav a.active {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .mobile-nav a i { width: 24px; text-align: center; color: var(--primary-light); }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(196, 30, 42, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(245, 166, 35, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(196, 30, 42, 0.15);
+            border: 1px solid rgba(196, 30, 42, 0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .hero-badge i { font-size: 12px; }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== SEARCH BAR ===== */
+        .search-section {
+            position: relative;
+            z-index: 10;
+            max-width: 720px;
+            margin: -40px auto 0;
+            padding: 0 24px;
+        }
+
+        .search-bar {
+            display: flex;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg), 0 0 0 3px rgba(196, 30, 42, 0.15);
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 20px 24px;
+            font-size: 16px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            outline: none;
+        }
+
+        .search-bar input::placeholder { color: var(--text-muted); }
+
+        .search-bar button {
+            background: var(--primary);
+            border: none;
+            padding: 20px 32px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .search-bar button:hover { background: var(--primary-dark); }
+
+        /* ===== FILTERS ===== */
+        .filters-section {
+            max-width: 1400px;
+            margin: 48px auto 0;
+            padding: 0 24px;
+        }
+
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-chip {
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--primary);
+            color: var(--text-primary);
+            background: rgba(196, 30, 42, 0.1);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-chip i { margin-right: 4px; font-size: 12px; }
+
+        .filters-divider {
+            width: 1px;
+            height: 28px;
+            background: var(--border);
+            margin: 0 8px;
+        }
+
+        .country-flag {
+            margin-right: 4px;
+        }
+
+        /* ===== RESULTS INFO ===== */
+        .results-bar {
+            max-width: 1400px;
+            margin: 32px auto 0;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .results-count strong { color: var(--text-primary); }
+
+        .view-toggles {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .view-toggle {
+            padding: 8px 12px;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .view-toggle.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .sort-select {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .sort-select option { background: var(--bg-card); }
+
+        /* ===== REPOSITORY GRID ===== */
+        .repository-section {
+            max-width: 1400px;
+            margin: 24px auto 80px;
+            padding: 0 24px;
+        }
+
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .repo-grid.list-view {
+            grid-template-columns: 1fr;
+        }
+
+        .repo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .repo-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .repo-card-image {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .repo-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .repo-card:hover .repo-card-image img {
+            transform: scale(1.05);
+        }
+
+        .repo-card-category {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cat-projects { background: rgba(59, 130, 246, 0.9); color: white; }
+        .cat-events { background: rgba(168, 85, 247, 0.9); color: white; }
+        .cat-trainings { background: rgba(34, 197, 94, 0.9); color: white; }
+        .cat-campaigns { background: rgba(245, 158, 11, 0.9); color: white; }
+        .cat-fieldvisits { background: rgba(236, 72, 153, 0.9); color: white; }
+        .cat-reports { background: rgba(107, 114, 128, 0.9); color: white; }
+        .cat-casestudies { background: rgba(20, 184, 166, 0.9); color: white; }
+        .cat-photosvideos { background: rgba(239, 68, 68, 0.9); color: white; }
+        .cat-partnerships { background: rgba(99, 102, 241, 0.9); color: white; }
+        .cat-publications { background: rgba(217, 119, 6, 0.9); color: white; }
+
+        .repo-card-country {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .repo-card-body {
+            padding: 20px;
+        }
+
+        .repo-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .repo-card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .repo-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .repo-card-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .repo-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .repo-card-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .repo-card-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary-light);
+            background: rgba(196, 30, 42, 0.1);
+        }
+
+        .repo-card-btn.download-btn:hover {
+            border-color: var(--success);
+            color: var(--success);
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        /* List view */
+        .repo-grid.list-view .repo-card {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .repo-grid.list-view .repo-card-image {
+            width: 240px;
+            min-width: 240px;
+            height: auto;
+            min-height: 160px;
+        }
+
+        .repo-grid.list-view .repo-card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-dark);
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .modal-body h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .modal-body .meta-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .meta-tag {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .modal-body p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover { background: #16a34a; }
+
+        /* ===== ADMIN SECTION ===== */
+        .admin-section {
+            display: none;
+            min-height: 100vh;
+            padding-top: 96px;
+        }
+
+        .admin-section.active { display: block; }
+        .main-content.hidden { display: none; }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .admin-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .admin-tab {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .admin-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .admin-tab:hover:not(.active) {
+            color: var(--text-primary);
+        }
+
+        /* Upload Form */
+        .upload-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group label .required {
+            color: var(--primary-light);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(196, 30, 42, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group select option {
+            background: var(--bg-dark);
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(196, 30, 42, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(196, 30, 42, 0.1);
+        }
+
+        .file-upload-area i {
+            font-size: 36px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .file-upload-area p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .file-upload-area .browse-link {
+            color: var(--primary-light);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .file-upload-area .file-types {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .file-list {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-dark);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .file-item i {
+            font-size: 20px;
+            color: var(--primary-light);
+        }
+
+        .file-item-info {
+            flex: 1;
+        }
+
+        .file-item-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .file-item-size {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .file-item-remove {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: var(--transition);
+        }
+
+        .file-item-remove:hover { color: var(--primary-light); }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: flex-end;
+        }
+
+        /* Admin Table */
+        .admin-table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .admin-table td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .admin-table .title-cell {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-published { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+        .status-draft { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .status-pending { background: rgba(59, 130, 246, 0.15); color: var(--info); }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+        }
+
+        .action-btn.delete:hover {
+            color: var(--primary-light);
+            border-color: var(--primary);
+            background: rgba(196, 30, 42, 0.1);
+        }
+
+        /* ===== LOGIN MODAL ===== */
+        .login-modal {
+            max-width: 440px;
+        }
+
+        .login-modal .modal-body {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .login-modal .login-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid var(--primary);
+        }
+
+        .login-modal h2 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .login-modal .login-sub {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .login-modal .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .login-modal .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 14px;
+            font-size: 15px;
+        }
+
+        .login-error {
+            background: rgba(196, 30, 42, 0.1);
+            border: 1px solid rgba(196, 30, 42, 0.3);
+            color: var(--primary-light);
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 60px 24px 32px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-brand-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+
+        .footer-brand h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 4px 0;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover { color: var(--primary-light); }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-social:hover {
+            border-color: var(--primary);
+            color: var(--primary-light);
+            background: rgba(196, 30, 42, 0.1);
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            top: 88px;
+            right: 24px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--text-primary);
+            animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s forwards;
+            max-width: 360px;
+        }
+
+        .toast.success { border-left: 3px solid var(--success); }
+        .toast.success i { color: var(--success); }
+        .toast.error { border-left: 3px solid var(--primary); }
+        .toast.error i { color: var(--primary-light); }
+        .toast.info { border-left: 3px solid var(--info); }
+        .toast.info i { color: var(--info); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* ===== PAGINATION ===== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 48px;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .page-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary-light);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* ===== LOADING SKELETON ===== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-surface) 25%, var(--border) 50%, var(--bg-surface) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-sm);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-toggle { display: block; }
+
+            .hero h1 { font-size: 2.2rem; }
+            .hero-stats { gap: 24px; }
+            .hero-stat-number { font-size: 2rem; }
+
+            .repo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .repo-grid.list-view .repo-card {
+                flex-direction: column;
+            }
+
+            .repo-grid.list-view .repo-card-image {
+                width: 100%;
+                min-width: auto;
+                height: 180px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .admin-table-container {
+                overflow-x: auto;
+            }
+
+            .results-bar {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar button {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav-container">
+            <a class="nav-brand" onclick="showPage('home')">
+                <img src="https://dvxrhkgloakisnvqoxgl.supabase.co/storage/v1/object/sign/images/inputs/1787075635767_jrqtwxvjt.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80NWE1YWU1ZS0xNzg4LTRiMWYtYWM5OC1hMjgwNmQ2OTM4ZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvaW5wdXRzLzE3ODcwNzU2MzU3NjdfanJxdHd4dmp0LnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODcwNzU5MjgsImV4cCI6MTgxODYxMTkyOH0._HCNb1iT5rTBz0zfNY97PqPNYjAu2kNdDLBs2OrVNU8" alt="AHOY Logo" class="nav-logo">
+                <div class="nav-brand-text">
+                    <span class="nav-brand-name">AHOY</span>
+                    <span class="nav-brand-sub">Repository</span>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a onclick="showPage('home')" class="active" data-page="home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a onclick="showPage('home'); scrollToSection('repository')" data-page="repository"><i class="fas fa-folder-open"></i> Repository</a></li>
+                <li><a onclick="openLoginModal()" class="nav-admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+
+            <button class="mobile-toggle" onclick="toggleMobileNav()">
+                <i class="fas fa-bars" id="mobileIcon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobileNav">
+        <a onclick="showPage('home'); toggleMobileNav();" class="active"><i class="fas fa-home"></i> Home</a>
+        <a onclick="showPage('home'); scrollToSection('repository'); toggleMobileNav();"><i class="fas fa-folder-open"></i> Repository</a>
+        <a onclick="openLoginModal(); toggleMobileNav();"><i class="fas fa-lock"></i> Admin Panel</a>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== HOME PAGE ===== -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-grid-bg"></div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-globe-africa"></i> Empowering Youth Worldwide
+                </div>
+                <h1>Association of Humble and Obedient Youths</h1>
+                <p>A centralized repository documenting our global impact across projects, events, campaigns, and partnerships serving communities in Nigeria, Egypt, Canada, and the United Kingdom.</p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="statProjects">0</div>
+                        <div class="hero-stat-label">Projects</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="statCountries">4</div>
+                        <div class="hero-stat-label">Countries</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="statEvents">0</div>
+                        <div class="hero-stat-label">Events</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="statReports">0</div>
+                        <div class="hero-stat-label">Reports</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search -->
+        <section class="search-section">
+            <div class="search-bar">
+                <input type="text" placeholder="Search projects, events, reports, campaigns..." id="searchInput" oninput="filterItems()">
+                <button onclick="filterItems()"><i class="fas fa-search"></i> Search</button>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="filters-section" id="repository">
+            <div class="filters-container">
+                <span class="filter-label">Category:</span>
+                <div class="filter-group" id="categoryFilters">
+                    <button class="filter-chip active" data-category="all" onclick="setFilter('category', 'all', this)">All</button>
+                    <button class="filter-chip" data-category="Projects" onclick="setFilter('category', 'Projects', this)"><i class="fas fa-project-diagram"></i> Projects</button>
+                    <button class="filter-chip" data-category="Events" onclick="setFilter('category', 'Events', this)"><i class="fas fa-calendar-alt"></i> Events</button>
+                    <button class="filter-chip" data-category="Trainings" onclick="setFilter('category', 'Trainings', this)"><i class="fas fa-chalkboard-teacher"></i> Trainings</button>
+                    <button class="filter-chip" data-category="Campaigns" onclick="setFilter('category', 'Campaigns', this)"><i class="fas fa-bullhorn"></i> Campaigns</button>
+                    <button class="filter-chip" data-category="Field visits" onclick="setFilter('category', 'Field visits', this)"><i class="fas fa-map-marked-alt"></i> Field Visits</button>
+                    <button class="filter-chip" data-category="Reports" onclick="setFilter('category', 'Reports', this)"><i class="fas fa-file-alt"></i> Reports</button>
+                    <button class="filter-chip" data-category="Case studies" onclick="setFilter('category', 'Case studies', this)"><i class="fas fa-search"></i> Case Studies</button>
+                    <button class="filter-chip" data-category="Photos/videos" onclick="setFilter('category', 'Photos/videos', this)"><i class="fas fa-photo-video"></i> Photos/Videos</button>
+                    <button class="filter-chip" data-category="Partnerships" onclick="setFilter('category', 'Partnerships', this)"><i class="fas fa-handshake"></i> Partnerships</button>
+                    <button class="filter-chip" data-category="Publications" onclick="setFilter('category', 'Publications', this)"><i class="fas fa-book"></i> Publications</button>
+                </div>
+            </div>
+
+            <div class="filters-container" style="margin-top: 12px;">
+                <span class="filter-label">Country:</span>
+                <div class="filter-group" id="countryFilters">
+                    <button class="filter-chip active" data-country="all" onclick="setFilter('country', 'all', this)">All Countries</button>
+                    <button class="filter-chip" data-country="Nigeria" onclick="setFilter('country', 'Nigeria', this)"><span class="country-flag">🇳🇬</span> Nigeria</button>
+                    <button class="filter-chip" data-country="Egypt" onclick="setFilter('country', 'Egypt', this)"><span class="country-flag">🇪🇬</span> Egypt</button>
+                    <button class="filter-chip" data-country="Canada" onclick="setFilter('country', 'Canada', this)"><span class="country-flag">🇨🇦</span> Canada</button>
+                    <button class="filter-chip" data-country="United Kingdom" onclick="setFilter('country', 'United Kingdom', this)"><span class="country-flag">🇬🇧</span> United Kingdom</button>
+                </div>
+
+                <div class="filters-divider"></div>
+
+                <select class="sort-select" id="sortSelect" onchange="filterItems()">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="title-asc">Title A-Z</option>
+                    <option value="title-desc">Title Z-A</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Results Bar -->
+        <div class="results-bar">
+            <span class="results-count" id="resultsCount">Showing <strong>0</strong> items</span>
+            <div style="display:flex;gap:12px;align-items:center;">
+                <div class="view-toggles">
+                    <button class="view-toggle active" onclick="setView('grid', this)" title="Grid View"><i class="fas fa-th-large"></i></button>
+                    <button class="view-toggle" onclick="setView('list', this)" title="List View"><i class="fas fa-list"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Repository Grid -->
+        <section class="repository-section">
+            <div class="repo-grid" id="repoGrid"></div>
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <i class="fas fa-search"></i>
+                <h3>No items found</h3>
+                <p>Try adjusting your filters or search terms.</p>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+    </main>
+
+    <!-- ===== ADMIN SECTION ===== -->
+    <section class="admin-section" id="adminSection">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2><i class="fas fa-shield-alt" style="color:var(--primary-light);margin-right:8px;"></i> Admin Panel</h2>
+                <div style="display:flex;align-items:center;gap:16px;">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="switchAdminTab('upload', this)">Upload New</button>
+                        <button class="admin-tab" onclick="switchAdminTab('manage', this)">Manage Items</button>
+                    </div>
+                    <button class="btn btn-outline" onclick="showPage('home')" style="padding:8px 16px;font-size:13px;">
+                        <i class="fas fa-arrow-left"></i> Back to Site
+                    </button>
+                </div>
+            </div>
+
+            <!-- Upload Tab -->
+            <div id="adminUploadTab">
+                <div class="upload-form">
+                    <h3 style="margin-bottom:24px;font-size:18px;">
+                        <i class="fas fa-cloud-upload-alt" style="color:var(--primary-light);margin-right:8px;"></i>
+                        Add New Repository Item
+                    </h3>
+
+                    <form id="uploadForm" onsubmit="handleUpload(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Title <span class="required">*</span></label>
+                                <input type="text" id="uploadTitle" placeholder="Enter item title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category <span class="required">*</span></label>
+                                <select id="uploadCategory" required>
+                                    <option value="">Select category</option>
+                                    <option value="Projects">Projects</option>
+                                    <option value="Events">Events</option>
+                                    <option value="Trainings">Trainings</option>
+                                    <option value="Campaigns">Campaigns</option>
+                                    <option value="Field visits">Field Visits</option>
+                                    <option value="Reports">Reports</option>
+                                    <option value="Case studies">Case Studies</option>
+                                    <option value="Photos/videos">Photos/Videos</option>
+                                    <option value="Partnerships">Partnerships</option>
+                                    <option value="Publications">Publications</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Country <span class="required">*</span></label>
+                                <select id="uploadCountry" required>
+                                    <option value="">Select country</option>
+                                    <option value="Nigeria">Nigeria</option>
+                                    <option value="Egypt">Egypt</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date <span class="required">*</span></label>
+                                <input type="date" id="uploadDate" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width" style="margin-bottom:20px;">
+                            <label>Description <span class="required">*</span></label>
+                            <textarea id="uploadDesc" placeholder="Provide a detailed description..." required></textarea>
+                        </div>
+
+                        <div class="form-group full-width" style="margin-bottom:20px;">
+                            <label>Tags</label>
+                            <input type="text" id="uploadTags" placeholder="Enter comma-separated tags (e.g., education, youth, community)">
+                        </div>
+
+                        <div class="form-group full-width" style="margin-bottom:20px;">
+                            <label>Files</label>
+                            <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & drop files here or <span class="browse-link">browse</span></p>
+                                <p class="file-types">PDF, DOC, JPG, PNG, MP4 — Max 50MB per file</p>
+                                <input type="file" id="fileInput" multiple style="display:none" onchange="handleFileSelect(event)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.mp4,.xlsx">
+                            </div>
+                            <div class="file-list" id="fileList"></div>
+                        </div>
+
+                        <div class="form-group full-width" style="margin-bottom:20px;">
+                            <label>Status</label>
+                            <select id="uploadStatus">
+                                <option value="Published">Publish Immediately</option>
+                                <option value="Draft">Save as Draft</option>
+                                <option value="Pending">Submit for Review</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" onclick="resetUploadForm()">Clear Form</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Manage Tab -->
+            <div id="adminManageTab" style="display:none;">
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Country</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DETAIL MODAL ===== -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('detailModal')"><i class="fas fa-times"></i></button>
+            <img id="modalImage" class="modal-image" src="" alt="">
+            <div class="modal-body">
+                <div class="meta-tags" id="modalTags"></div>
+                <h2 id="modalTitle"></h2>
+                <p id="modalDesc"></p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="showToast('Download started', 'success')"><i class="fas fa-download"></i> Download</button>
+                    <button class="btn btn-outline" onclick="showToast('Link copied to clipboard', 'info')"><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LOGIN MODAL ===== -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal login-modal">
+            <button class="modal-close" onclick="closeModal('loginModal')"><i class="fas fa-times"></i></button>
+            <div class="modal-body">
+                <img src="https://dvxrhkgloakisnvqoxgl.supabase.co/storage/v1/object/sign/images/inputs/1787075635767_jrqtwxvjt.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80NWE1YWU1ZS0xNzg4LTRiMWYtYWM5OC1hMjgwNmQ2OTM4ZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvaW5wdXRzLzE3ODcwNzU2MzU3NjdfanJxdHd4dmp0LnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODcwNzU5MjgsImV4cCI6MTgxODYxMTkyOH0._HCNb1iT5rTBz0zfNY97PqPNYjAu2kNdDLBs2OrVNU8" alt="AHOY" class="login-logo">
+                <h2>Admin Login</h2>
+                <p class="login-sub">Access the repository management panel</p>
+
+                <div class="login-error" id="loginError">Invalid credentials. Please try again.</div>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="admin@ahoy.org" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top:8px;"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-brand-row">
+                    <img src="https://dvxrhkgloakisnvqoxgl.supabase.co/storage/v1/object/sign/images/inputs/1787075635767_jrqtwxvjt.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80NWE1YWU1ZS0xNzg4LTRiMWYtYWM5OC1hMjgwNmQ2OTM4ZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvaW5wdXRzLzE3ODcwNzU2MzU3NjdfanJxdHd4dmp0LnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODcwNzU5MjgsImV4cCI6MTgxODYxMTkyOH0._HCNb1iT5rTBz0zfNY97PqPNYjAu2kNdDLBs2OrVNU8" alt="AHOY" class="footer-logo">
+                    <div>
+                        <h3>Association of Humble<br>and Obedient Youths</h3>
+                    </div>
+                </div>
+                <p>Empowering youth globally through projects, trainings, and community development initiatives across four countries.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Repository</h4>
+                <a href="#" onclick="setFilterFromFooter('Projects')">Projects</a>
+                <a href="#" onclick="setFilterFromFooter('Events')">Events</a>
+                <a href="#" onclick="setFilterFromFooter('Trainings')">Trainings</a>
+                <a href="#" onclick="setFilterFromFooter('Campaigns')">Campaigns</a>
+                <a href="#" onclick="setFilterFromFooter('Reports')">Reports</a>
+            </div>
+            <div class="footer-col">
+                <h4>Countries</h4>
+                <a href="#" onclick="setCountryFromFooter('Nigeria')">🇳🇬 Nigeria</a>
+                <a href="#" onclick="setCountryFromFooter('Egypt')">🇪🇬 Egypt</a>
+                <a href="#" onclick="setCountryFromFooter('Canada')">🇨🇦 Canada</a>
+                <a href="#" onclick="setCountryFromFooter('United Kingdom')">🇬🇧 United Kingdom</a>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#">About AHOY</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#" onclick="openLoginModal()">Admin Access</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Association of Humble and Obedient Youths (AHOY). All rights reserved.</p>
+            <div class="footer-socials">
+                <a href="#" class="footer-social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== DATA STORE =====
+        const CATEGORIES = ['Projects', 'Events', 'Trainings', 'Campaigns', 'Field visits', 'Reports', 'Case studies', 'Photos/videos', 'Partnerships', 'Publications'];
+        const COUNTRIES = ['Nigeria', 'Egypt', 'Canada', 'United Kingdom'];
+        const COUNTRY_FLAGS = { 'Nigeria': '🇳🇬', 'Egypt': '🇪🇬', 'Canada': '🇨🇦', 'United Kingdom': '🇬🇧' };
+
+        const CATEGORY_COLORS = {
+            'Projects': 'cat-projects',
+            'Events': 'cat-events',
+            'Trainings': 'cat-trainings',
+            'Campaigns': 'cat-campaigns',
+            'Field visits': 'cat-fieldvisits',
+            'Reports': 'cat-reports',
+            'Case studies': 'cat-casestudies',
+            'Photos/videos': 'cat-photosvideos',
+            'Partnerships': 'cat-partnerships',
+            'Publications': 'cat-publications'
+        };
+
+        const CATEGORY_ICONS = {
+            'Projects': 'fa-project-diagram',
+            'Events': 'fa-calendar-alt',
+            'Trainings': 'fa-chalkboard-teacher',
+            'Campaigns': 'fa-bullhorn',
+            'Field visits': 'fa-map-marked-alt',
+            'Reports': 'fa-file-alt',
+            'Case studies': 'fa-search',
+            'Photos/videos': 'fa-photo-video',
+            'Partnerships': 'fa-handshake',
+            'Publications': 'fa-book'
+        };
+
+        const SAMPLE_IMAGES = [
+            'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1559028012-481c04fa702d?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1531538606174-e1ed98e5efba?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=600&h=400&fit=crop',
+            'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&h=400&fit=crop'
+        ];
+
+        // Initialize with sample data
+        let repositoryItems = [];
+        let currentFilters = { category: 'all', country: 'all', search: '' };
+        let currentView = 'grid';
+        let currentPage = 1;
+        const ITEMS_PER_PAGE = 9;
+        let selectedFiles = [];
+        let isAdminLoggedIn = false;
+
+        function generateSampleData() {
+            const titles = {
+                'Projects': [
+                    'Clean Water Initiative for Rural Communities',
+                    'Digital Literacy Program for Underprivileged Youth',
+                    'Youth Entrepreneurship Development Scheme',
+                    'Community Health Outreach Program',
+                    'Environmental Sustainability Project',
+                    'Skills Acquisition Workshop Series',
+                    'Youth Leadership Academy',
+                    'Women Empowerment Initiative'
+                ],
+                'Events': [
+                    'Annual Youth Summit 2024',
+                    'International Day of Youth Celebration',
+                    'Community Town Hall Meeting',
+                    'Youth Conference on Sustainable Development',
+                    'Cultural Exchange Program Opening',
+                    'Charity Gala Night',
+                    'Interfaith Dialogue Session',
+                    'Volunteer Appreciation Ceremony'
+                ],
+                'Trainings': [
+                    'Digital Marketing Skills Bootcamp',
+                    'First Aid & Emergency Response Training',
+                    'Leadership & Management Workshop',
+                    'Financial Literacy Training Program',
+                    'Public Speaking & Communication Skills',
+                    'Project Management Certification Course',
+                    'Entrepreneurship Development Training',
+                    'Conflict Resolution Workshop'
+                ],
+                'Campaigns': [
+                    'Say No to Drug Abuse Campaign',
+                    'Vote for Your Future - Voter Registration Drive',
+                    'Clean Environment, Healthy Community',
+                    'Mental Health Awareness Month',
+                    'Stop Gender-Based Violence Campaign',
+                    'Plant a Tree Initiative',
+                    'Digital Safety Awareness Program',
+                    'Education for All Campaign'
+                ],
+                'Field visits': [
+                    'Rural Community Assessment Visit',
+                    'School Inspection & Support Visit',
+                    'Healthcare Facility Evaluation',
+                    'Agricultural Project Monitoring',
+                    'Orphanage Support Visit',
+                    'Water Project Site Inspection',
+                    'Market Survey & Youth Engagement',
+                    'Disaster Relief Assessment Visit'
+                ],
+                'Reports': [
+                    'Annual Impact Report 2024',
+                    'Quarterly Financial Statement Q3',
+                    'Project Evaluation Report - Water Initiative',
+                    'Youth Employment Survey Report',
+                    'Community Needs Assessment Report',
+                    'Environmental Impact Study',
+                    'Partnership Program Review',
+                    'Capacity Building Outcomes Report'
+                ],
+                'Case studies': [
+                    'Transforming Youth Lives in Lagos',
+                    'From Dropout to Business Owner - A Success Story',
+                    'Community Health Worker Program Results',
+                    'Digital Skills Changed Her Life',
+                    'Building Peace Through Youth Engagement',
+                    'Water Project Impact on Rural Health',
+                    'Youth-Led Environmental Action',
+                    'Empowering Women in Rural Egypt'
+                ],
+                'Photos/videos': [
+                    'Youth Summit 2024 Photo Gallery',
+                    'Documentary: The AHOY Journey',
+                    'Training Session Highlights',
+                    'Community Outreach Photo Collection',
+                    'Field Visit Documentation Video',
+                    'Volunteer Day Photo Album',
+                    'Project Completion Celebration',
+                    'Cultural Event Highlights Reel'
+                ],
+                'Partnerships': [
+                    'UNICEF Partnership for Child Welfare',
+                    'WHO Collaborative Health Program',
+                    'Local Government Partnership Agreement',
+                    'University Research Collaboration',
+                    'Corporate Sponsorship Program',
+                    'NGO Coalition for Youth Development',
+                    'International Youth Alliance Membership',
+                    'Community-Based Organization Network'
+                ],
+                'Publications': [
+                    'Youth Development Journal - Vol. 5',
+                    'Policy Brief on Youth Employment',
+                    'Best Practices in Community Development',
+                    'Research Paper: Youth Migration Patterns',
+                    'Newsletter - AHOY Quarterly Issue 12',
+                    'Annual Review & Outlook Publication',
+                    'Guide to Youth Volunteerism',
+                    'Handbook for Youth Leaders'
+                ]
+            };
+
+            const descriptions = [
+                'A comprehensive initiative aimed at addressing critical community needs through youth engagement and sustainable development practices.',
+                'An evidence-based program designed to empower young people with essential skills and knowledge for personal and professional growth.',
+                'A collaborative effort between local and international partners to create lasting positive change in underserved communities.',
+                'A groundbreaking program that has successfully transformed the lives of hundreds of youth across multiple regions.',
+                'An innovative approach to community development that leverages technology and youth creativity for maximum impact.',
+                'A targeted initiative focusing on capacity building and skills development for sustainable community transformation.',
+                'A multi-phase project addressing interconnected challenges through integrated solutions and community participation.',
+                'A model program demonstrating effective strategies for youth empowerment and community resilience building.'
+            ];
+
+            let items = [];
+            let id = 1;
+
+            for (const category of CATEGORIES) {
+                const catTitles = titles[category] || [];
+                const count = Math.min(catTitles.length, 5 + Math.floor(Math.random() * 4));
+
+                for (let i = 0; i < count; i++) {
+                    const country = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
+                    const month = Math.floor(Math.random() * 12);
+                    const day = 1 + Math.floor(Math.random() * 28);
+                    const year = 2023 + Math.floor(Math.random() * 2);
+                    const date = new Date(year, month, day);
+
+                    const tags = [category.toLowerCase()];
+                    if (Math.random() > 0.5) tags.push('youth');
+                    if (Math.random() > 0.5) tags.push('community');
+                    if (Math.random() > 0.5) tags.push('development');
+
+                    items.push({
+                        id: id++,
+                        title: catTitles[i % catTitles.length],
+                        category: category,
+                        country: country,
+                        date: date.toISOString().split('T')[0],
+                        description: descriptions[Math.floor(Math.random() * descriptions.length)],
+                        image: SAMPLE_IMAGES[Math.floor(Math.random() * SAMPLE_IMAGES.length)],
+                        tags: tags,
+                        status: ['Published', 'Published', 'Published', 'Draft', 'Pending'][Math.floor(Math.random() * 5)]
+                    });
+                }
+            }
+
+            return items;
+        }
+
+        // ===== INITIALIZATION =====
+        function init() {
+            repositoryItems = generateSampleData();
+            document.getElementById('uploadDate').valueAsDate = new Date();
+
+            // Setup drag and drop
+            const dropArea = document.getElementById('fileUploadArea');
+            ['dragenter', 'dragover'].forEach(evt => {
+                dropArea.addEventListener(evt, e => { e.preventDefault(); dropArea.classList.add('dragover'); });
+            });
+            ['dragleave', 'drop'].forEach(evt => {
+                dropArea.addEventListener(evt, e => { e.preventDefault(); dropArea.classList.remove('dragover'); });
+            });
+            dropArea.addEventListener('drop', e => {
+                const files = e.dataTransfer.files;
+                addFiles(files);
+            });
+
+            updateStats();
+            filterItems();
+        }
+
+        // ===== PAGE NAVIGATION =====
+        function showPage(page) {
+            const mainContent = document.getElementById('mainContent');
+            const adminSection = document.getElementById('adminSection');
+
+            // Update nav active states
+            document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+                a.classList.remove('active');
+                if (a.dataset.page === page) a.classList.add('active');
+            });
+
+            if (page === 'home') {
+                mainContent.classList.remove('hidden');
+                adminSection.classList.remove('active');
+            } else if (page === 'admin') {
+                mainContent.classList.add('hidden');
+                adminSection.classList.add('active');
+                populateAdminTable();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToSection(id) {
+            setTimeout(() => {
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // ===== MOBILE NAV =====
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const icon = document.getElementById('mobileIcon');
+            nav.classList.toggle('open');
+            icon.className = nav.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        }
+
+        // ===== HEADER SCROLL =====
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ===== FILTERING =====
+        function setFilter(type, value, btn) {
+            currentFilters[type] = value;
+            currentPage = 1;
+
+            const groupId = type === 'category' ? 'categoryFilters' : 'countryFilters';
+            document.querySelectorAll(`#${groupId} .filter-chip`).forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+
+            filterItems();
+        }
+
+        function filterItems() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            currentFilters.search = search;
+
+            let filtered = repositoryItems.filter(item => {
+                const matchCategory = currentFilters.category === 'all' || item.category === currentFilters.category;
+                const matchCountry = currentFilters.country === 'all' || item.country === currentFilters.country;
+                const matchSearch = !search || 
+                    item.title.toLowerCase().includes(search) || 
+                    item.description.toLowerCase().includes(search) ||
+                    item.category.toLowerCase().includes(search) ||
+                    item.country.toLowerCase().includes(search) ||
+                    item.tags.some(t => t.toLowerCase().includes(search));
+                return matchCategory && matchCountry && matchSearch;
+            });
+
+            // Sort
+            const sort = document.getElementById('sortSelect').value;
+            switch (sort) {
+                case 'newest': filtered.sort((a, b) => new Date(b.date) - new Date(a.date)); break;
+                case 'oldest': filtered.sort((a, b) => new Date(a.date) - new Date(b.date)); break;
+                case 'title-asc': filtered.sort((a, b) => a.title.localeCompare(b.title)); break;
+                case 'title-desc': filtered.sort((a, b) => b.title.localeCompare(a.title)); break;
+            }
+
+            renderGrid(filtered);
+            renderPagination(filtered.length);
+            document.getElementById('resultsCount').innerHTML = `Showing <strong>${filtered.length}</strong> items`;
+        }
+
+        // ===== RENDERING =====
+        function renderGrid(items) {
+            const grid = document.getElementById('repoGrid');
+            const empty = document.getElementById('emptyState');
+
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const paged = items.slice(start, start + ITEMS_PER_PAGE);
+
+            if (paged.length === 0) {
+                grid.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+
+            grid.innerHTML = paged.map(item => `
+                <div class="repo-card" onclick="openDetailModal(${item.id})">
+                    <div class="repo-card-image">
+                        <img src="${item.image}" alt="${item.title}" loading="lazy">
+                        <span class="repo-card-category ${CATEGORY_COLORS[item.category]}">${item.category}</span>
+                        <span class="repo-card-country">${COUNTRY_FLAGS[item.country]} ${item.country}</span>
+                    </div>
+                    <div class="repo-card-body">
+                        <div class="repo-card-title">${item.title}</div>
+                        <div class="repo-card-desc">${item.description}</div>
+                        <div class="repo-card-meta">
+                            <span class="repo-card-date"><i class="fas fa-calendar"></i> ${formatDate(item.date)}</span>
+                            <div class="repo-card-actions">
+                                <button class="repo-card-btn" onclick="event.stopPropagation(); showToast('Preview opened', 'info')"><i class="fas fa-eye"></i></button>
+                                <button class="repo-card-btn download-btn" onclick="event.stopPropagation(); showToast('Download started', 'success')"><i class="fas fa-download"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+            const pag = document.getElementById('pagination');
+
+            if (totalPages <= 1) { pag.innerHTML = ''; return; }
+
+            let html = `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}><i class="fas fa-chevron-left"></i></button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<button class="page-btn" disabled>...</button>`;
+                }
+            }
+
+            html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}><i class="fas fa-chevron-right"></i></button>`;
+
+            pag.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            const filtered = getFilteredItems();
+            const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderGrid(filtered);
+            renderPagination(filtered.length);
+            document.getElementById('repository').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getFilteredItems() {
+            const search = currentFilters.search;
+            return repositoryItems.filter(item => {
+                const matchCategory = currentFilters.category === 'all' || item.category === currentFilters.category;
+                const matchCountry = currentFilters.country === 'all' || item.country === currentFilters.country;
+                const matchSearch = !search || 
+                    item.title.toLowerCase().includes(search) || 
+                    item.description.toLowerCase().includes(search) ||
+                    item.category.toLowerCase().includes(search) ||
+                    item.country.toLowerCase().includes(search);
+                return matchCategory && matchCountry && matchSearch;
+            });
+        }
+
+        function setView(view, btn) {
+            currentView = view;
+            document.querySelectorAll('.view-toggle').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const grid = document.getElementById('repoGrid');
+            if (view === 'list') {
+                grid.classList.add('list-view');
+            } else {
+                grid.classList.remove('list-view');
+            }
+        }
+
+        // ===== DETAIL MODAL =====
+        function openDetailModal(id) {
+            const item = repositoryItems.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('modalImage').src = item.image;
+            document.getElementById('modalTitle').textContent = item.title;
+            document.getElementById('modalDesc').textContent = item.description;
+
+            const tagsHtml = `
+                <span class="meta-tag"><i class="${CATEGORY_ICONS[item.category]}"></i> ${item.category}</span>
+                <span class="meta-tag">${COUNTRY_FLAGS[item.country]} ${item.country}</span>
+                <span class="meta-tag"><i class="fas fa-calendar"></i> ${formatDate(item.date)}</span>
+                <span class="meta-tag"><i class="fas fa-tag"></i> ${item.tags.join(', ')}</span>
+            `;
+            document.getElementById('modalTags').innerHTML = tagsHtml;
+
+            document.getElementById('detailModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ===== LOGIN =====
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Demo credentials: admin@ahoy.org / admin123
+            if (email === 'admin@ahoy.org' && password === 'admin123') {
+                isAdminLoggedIn = true;
+                closeModal('loginModal');
+                showPage('admin');
+                showToast('Welcome back, Admin!', 'success');
+                document.getElementById('loginError').style.display = 'none';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // ===== ADMIN =====
+        function switchAdminTab(tab, btn) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.getElementById('adminUploadTab').style.display = tab === 'upload' ? 'block' : 'none';
+            document.getElementById('adminManageTab').style.display = tab === 'manage' ? 'block' : 'none';
+
+            if (tab === 'manage') populateAdminTable();
+        }
+
+        function populateAdminTable() {
+            const tbody = document.getElementById('adminTableBody');
+            const items = [...repositoryItems].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            tbody.innerHTML = items.map(item => `
+                <tr>
+                    <td class="title-cell">${item.title}</td>
+                    <td><span class="repo-card-category ${CATEGORY_COLORS[item.category]}" style="position:static;">${item.category}</span></td>
+                    <td>${COUNTRY_FLAGS[item.country]} ${item.country}</td>
+                    <td>${formatDate(item.date)}</td>
+                    <td><span class="status-badge status-${item.status.toLowerCase()}">${item.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn" title="Edit" onclick="showToast('Edit mode coming soon', 'info')"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete" title="Delete" onclick="deleteItem(${item.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteItem(id) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                repositoryItems = repositoryItems.filter(i => i.id !== id);
+                populateAdminTable();
+                filterItems();
+                updateStats();
+                showToast('Item deleted successfully', 'success');
+            }
+        }
+
+        // ===== FILE UPLOAD =====
+        function handleFileSelect(e) {
+            addFiles(e.target.files);
+        }
+
+        function addFiles(fileListObj) {
+            for (const file of fileListObj) {
+                if (file.size > 50 * 1024 * 1024) {
+                    showToast(`${file.name} exceeds 50MB limit`, 'error');
+                    continue;
+                }
+                selectedFiles.push(file);
+            }
+            renderFileList();
+        }
+
+        function renderFileList() {
+            const list = document.getElementById('fileList');
+            list.innerHTML = selectedFiles.map((file, idx) => {
+                const icon = file.type.includes('pdf') ? 'fa-file-pdf' : 
+                             file.type.includes('image') ? 'fa-file-image' :
+                             file.type.includes('video') ? 'fa-file-video' :
+                             file.type.includes('word') ? 'fa-file-word' :
+                             file.type.includes('sheet') ? 'fa-file-excel' : 'fa-file';
+                return `
+                    <div class="file-item">
+                        <i class="fas ${icon}"></i>
+                        <div class="file-item-info">
+                            <div class="file-item-name">${file.name}</div>
+                            <div class="file-item-size">${formatFileSize(file.size)}</div>
+                        </div>
+                        <button class="file-item-remove" onclick="removeFile(${idx})"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function removeFile(idx) {
+            selectedFiles.splice(idx, 1);
+            renderFileList();
+        }
+
+        // ===== FORM HANDLING =====
+        function handleUpload(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('uploadTitle').value.trim();
+            const category = document.getElementById('uploadCategory').value;
+            const country = document.getElementById('uploadCountry').value;
+            const date = document.getElementById('uploadDate').value;
+            const description = document.getElementById('uploadDesc').value.trim();
+            const tags = document.getElementById('uploadTags').value.split(',').map(t => t.trim()).filter(Boolean);
+            const status = document.getElementById('uploadStatus').value;
+
+            if (!title || !category || !country || !date || !description) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const newItem = {
+                id: repositoryItems.length + 1,
+                title,
+                category,
+                country,
+                date,
+                description,
+                image: SAMPLE_IMAGES[Math.floor(Math.random() * SAMPLE_IMAGES.length)],
+                tags: tags.length ? tags : [category.toLowerCase()],
+                status
+            };
+
+            repositoryItems.unshift(newItem);
+            resetUploadForm();
+            filterItems();
+            updateStats();
+            showToast('Item uploaded successfully!', 'success');
+        }
+
+        function resetUploadForm() {
+            document.getElementById('uploadForm').reset();
+            document.getElementById('uploadDate').valueAsDate = new Date();
+            selectedFiles = [];
+            renderFileList();
+        }
+
+        // ===== FOOTER FILTER SHORTCUTS =====
+        function setFilterFromFooter(category) {
+            showPage('home');
+            const btn = document.querySelector(`[data-category="${category}"]`);
+            if (btn) setFilter('category', category, btn);
+            setTimeout(() => scrollToSection('repository'), 200);
+        }
+
+        function setCountryFromFooter(country) {
+            showPage('home');
+            const btn = document.querySelector(`[data-country="${country}"]`);
+            if (btn) setFilter('country', country, btn);
+            setTimeout(() => scrollToSection('repository'), 200);
+        }
+
+        // ===== UTILITIES =====
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        function updateStats() {
+            const projects = repositoryItems.filter(i => i.category === 'Projects').length;
+            const events = repositoryItems.filter(i => i.category === 'Events').length;
+            const reports = repositoryItems.filter(i => i.category === 'Reports').length;
+
+            animateCounter('statProjects', projects);
+            animateCounter('statEvents', events);
+            animateCounter('statReports', reports);
+        }
+
+        function animateCounter(id, target) {
+            const el = document.getElementById(id);
+            let current = parseInt(el.textContent) || 0;
+            if (current === target) return;
+
+            const step = target > current ? 1 : -1;
+            const interval = setInterval(() => {
+                current += step;
+                el.textContent = current;
+                if (current === target) clearInterval(interval);
+            }, 50);
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
+            container.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ===== INIT =====
+        init();
+    </script>
+</body>
+</html>
